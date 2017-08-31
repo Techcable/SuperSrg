@@ -1,0 +1,14 @@
+# IntelliJ
+*.iml
+.idea
+
+# Gradle
+.gradle
+build
+
+# Rust
+target
+native/testing
+
+# Python
+__pycache__

@@ -1,0 +1,76 @@
+[package]
+name = "supersrg"
+version = "0.1.0"
+authors = ["Techcable <Techcable@techcable.net>"]
+description = "The ultimate mapping utility"
+# Not ready for prime time
+publish = false
+
+[dependencies]
+# String interning
+string_cache = "^0.6"
+# Compile time hashmaps
+phf = "^0.7.21"
+phf_macros = "^0.7.21"
+# Fast hashmaps (signifigantly faster than both fnv and siphash)
+seahash = "^3.0.5"
+# Used for Modified-UTF8 support in classfiles
+#cesu8 = "^1.1.0"
+# MessagePack used for serializing RangeMaps
+rmp = "^0.8.6"
+# Serde
+serde = "^1.0.8"
+serde_derive = "^1.0.8"
+rmp-serde = "^0.13.3"
+# Optimized byte serialization
+serde_bytes = "^0.10.0"
+byteorder = "^1.0.0"
+# Used to cache signatures
+typed-arena = "^1.3.0"
+# Recursive directory walking
+walkdir = "^1.0.7"
+# Multi-consumer channels
+chan = "^0.1.19"
+# Concurrent hash map
+chashmap = "^2.2.0"
+# Command line parsing
+clap = "^2.25.0"
+# Zipfile extraction
+zip = "^0.2.3"
+# Web requests
+curl = "^0.4.7"
+# CSV parsing
+csv = "^1.0.0-beta.3"
+# Json parsing
+serde_json = "^1.0.2"
+# Faster hashing, and hash lookup customization
+ordermap = { git = "https://github.com/Techcable/ordermap", branch = "rebased/lookup-trait" } 
+# Concurrency utilities
+crossbeam = "^0.2.10"
+# Staticaly linked libgit2 bindings
+git2 = "^0.6.6"
+# Determine the number of cpus
+num_cpus = "^1.6.2"
+# Regular expressions
+regex = "^0.2.2"
+# Lazily computed statics
+lazy_static = "^0.2.8"
+# Lightning-fast compression
+lz4 = "^1.21.1"
+# Better synchronization primitives
+parking_lot = "^0.4.4"
+# Thread local objects, used for thread local arenas
+thread_local = "^0.3.4"
+# Logging, to help debug my stuff
+log = "^0.3.8"
+env_logger = "^0.4.3"
+# Use to time downloads
+chrono = "^0.4.0"
+
+[[bin]]
+name = "supersrg"
+path = "src/main.rs"
+
+[profile.release]
+# Helps reduce binary size
+lto = true
