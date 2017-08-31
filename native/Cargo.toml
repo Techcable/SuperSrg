@@ -3,7 +3,7 @@ name = "supersrg"
 version = "0.1.0"
 authors = ["Techcable <Techcable@techcable.net>"]
 description = "The ultimate mapping utility"
-# Not ready for prime time
+# Shouldn't be released to crates.io
 publish = false
 
 [dependencies]
@@ -17,11 +17,11 @@ seahash = "^3.0.5"
 # Used for Modified-UTF8 support in classfiles
 #cesu8 = "^1.1.0"
 # MessagePack used for serializing RangeMaps
-rmp = "^0.8.6"
+rmp = "0.8.6"
 # Serde
 serde = "^1.0.8"
 serde_derive = "^1.0.8"
-rmp-serde = "^0.13.3"
+rmp-serde = "0.13.3"
 # Optimized byte serialization
 serde_bytes = "^0.10.0"
 byteorder = "^1.0.0"
