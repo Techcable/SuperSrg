@@ -1,16 +1,115 @@
 SuperSrg
 =========
-The ultimate srg remapper, supporting both jar and source remapping.
-
-**NOTE:** I'm unlikely to continue to maintain this since i've somewhat lost intrest in minecraft,
-but I think some people may find it useful as I used it to get MCP working.
+The ultimate srg mappings tool.
 
 ## Features
-- Directly remap source files, using spoon AST.
-  - The necessary information is extracted from the AST into a RangeMap file,
-    which can be used to apply mappings very fast
-- Java portion uses [SrgLib library](https://github.com/Techcable/SrgLib) to parse mappings
-- Native binary to generate minecraft mappings and apply rangemaps
+- Fast source remapping
+  - First determines what names need to be changed in Java with Spoon AST
+    - This info can be reused unless the original source files change,
+     regardless of what mappings need to be applied.
+  - Then, applies the range map in rust in less than a second
+- Minecraft mapping generation
+  - Generates mappings between any combination of spigot, MCP and obfuscated names.
+  - Supports any MCP version
+  - Can optionally remap just the obfuscated names, preserving the original.
+    - This is useful for applying the MCP mappings to the spigot ones,
+      since it'd preserve the deobfuscated spigot names,
+      while replacing the remaining obfsucated names with the MCP mappings.
+- Highly efficient binary mappings format used internally, but also supports srg and csrg.
 
-## TODO
-- Access transforms
+
+## Available Commands (native)
+
+### Generate Minecraft mappings
+Generates minecraft mappings based on the MCP and Spigot deobfuscation info :o
+````
+USAGE:
+    supersrg generate_minecraft [FLAGS] [OPTIONS] <minecraft_version> <output_dir> <targets>...
+
+FLAGS:
+        --cache             Specify an alternate cache location, defaulting to the output directory
+    -h, --help              Prints help information
+        --refresh-spigot    Refresh spigot BuildData information, checking if it's changed
+    -V, --version           Prints version information
+
+OPTIONS:
+        --builddata-commit <builddata_commit>
+            The spigot BuildData commit to generate the mappings for, infered by default
+
+        --format <format>
+            The mapping format to emit the resulting mappings in [default: binary]
+
+        --mcp <mcp_version>                      The MCP version to generate the mappings for
+
+ARGS:
+    <minecraft_version>    The minecraft version to generate the mappings for
+    <output_dir>           The output directory to place generated mappings
+    <targets>...           The target mappings to generate
+````
+SuperSrg supports any combination of the following:
+- `srg` - MCP's unique srg mappings, which are the same for each minecraft version.
+- `mcp` - MCP's crowd sourced deobfuscated mappings, fetched from `MCPBot`
+  - These have a independent version based on the date, which must be specified as an option.
+- `spigot` - Spigot's deobfuscation mappings, held in the `BuildData` git repo
+  - These are significantly lower quality than the MCP mappings, and most member names are still obfuscated
+  - These mappings don't change very often, since plugins use them and would break if the change
+  - Therefore the latest available mappings for the minecraft version are fetched by default, though this can be configured
+- `obf` - The obfuscated mojang names, which are used to unify the mappings systems
+
+Mapping targets take the form `{original}2{renamed}` with an optional modifier at the end.
+For example, `spigot2mcp` specifies mappings from the spigot names into the MCP names.
+Three modifiers are supported:
+- `classes` - Restricts the mappings to just class names.
+- `members` - Restricts the mappings to just member names.
+- `onlyobf` - Restricts the mappings to just names that are still obfuscated.
+  - This allows you to take advantage of other mappings, without changing names that are already deobfuscated.
+  - The motivating example is `spigot2mcp-onlyobf`, which would take advantage of the MCP mappings
+     without changing names spigot already deobfuscated.
+  - This is helpful since people often become familiar with and prefer a particular naming scheme (like spigot),
+     but still want to take advantage of the additional naming information.
+
+#### Available mappings targets
+
+### Apply range
+Applies the specified range map to the source directory
+````
+USAGE:
+    supersrg apply_range [FLAGS] <rangemap> <mappings> <source> <output>
+
+FLAGS:
+    -f, --force      Delete the output directory if it already exists
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+    -v, --verbose    Show verbose output
+
+ARGS:
+    <rangemap>    The SuperSrg binary rangemap to apply
+    <mappings>    The mappings file to apply
+    <source>      The source directory containing the files to remap
+    <output>      Where to place the remapped files
+````
+The rangemap is a binary file generated by the java class `net.techcable.supersrg.RangeExtractor`.
+Run the command `java -cp SuperSrg.jar net.techcable.supersrg.RangeExtractor --help` to get more info on that.
+Make sure to reuse the generated range map unless the original source files change,
+because it's very slow to generate.
+
+### Convert
+Converts from one mapping format into another.
+````
+Converts from one mapping format into another
+
+USAGE:
+    supersrg convert [OPTIONS] <input> <output>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+        --format <format>    The mapping format to emit the resulting mappings in [default: binary]
+
+ARGS:
+    <input>     The input mappings file to convert
+    <output>    The output file to place the resulting mappings
+````
+
