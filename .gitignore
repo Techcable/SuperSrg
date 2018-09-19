@@ -9,6 +9,7 @@ build
 # Rust
 target
 native/testing
+native/mappings
 
 # Python
 __pycache__

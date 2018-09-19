@@ -77,7 +77,7 @@ impl<'a> BuildDataCommit<'a> {
         Ok(())
     }
     pub fn read_class_mappings(&self) -> Result<MappingsBuilder, SpigotError> {
-        /// Approximate size of the build data class mappings
+        // Approximate size of the build data class mappings
         let mut buffer = String::with_capacity(64 * 1024);
         self.load_class_mapping_data(&mut buffer)?;
         buffer.shrink_to_fit();
@@ -86,7 +86,7 @@ impl<'a> BuildDataCommit<'a> {
         Ok(parser.finish())
     }
     pub fn read_member_mappings(&self) -> Result<MappingsBuilder, SpigotError> {
-        /// Approximate size of the build data member mappings
+        // Approximate size of the build data member mappings
         let mut buffer = String::with_capacity(128 * 1024);
         self.load_member_mapping_data(&mut buffer)?;
         buffer.shrink_to_fit();

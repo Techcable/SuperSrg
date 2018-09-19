@@ -1,6 +1,6 @@
 #![allow(dead_code)] // TODO: Cleanup
 #![cfg_attr(feature = "cargo-clippy", allow(inline_always))] // I know what I'm doing
-#![feature(catch_expr, str_checked_slicing, try_from, const_fn, associated_type_defaults)]
+#![feature( try_from, const_fn, associated_type_defaults)]
 extern crate seahash;
 extern crate string_cache;
 extern crate phf;

@@ -249,7 +249,7 @@ impl<'a> MappingsTargetComputer<'a> {
                             }
                         }
                         TargetComputeError::MappingError(cause) => {
-                            /// When one thread fails, all other threads must stop working and exit cleanly
+                            // When one thread fails, all other threads must stop working and exit cleanly
                             let _ = self.running_workers.lock();
                             if self.failed.compare_and_swap(false, true, Ordering::SeqCst) {
                                 // Someone else failed first, so prefer their Error
@@ -257,7 +257,7 @@ impl<'a> MappingsTargetComputer<'a> {
                             }
                             let was_done = self.done.swap(true, Ordering::SeqCst);
                             assert!(!was_done);
-                            /// Notify any sleeping threads that we're done
+                            // Notify any sleeping threads that we're done
                             self.work_cond.notify_all();
                             return Err(cause);
                         }

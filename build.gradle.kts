@@ -8,7 +8,7 @@ plugins {
     id("com.github.johnrengelman.shadow").version("2.0.0")
 }
 group = "net.techcable"
-version = "0.1.0"
+version = "0.1.1"
 repositories {
     mavenCentral()
     maven {

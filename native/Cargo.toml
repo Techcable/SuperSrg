@@ -1,6 +1,6 @@
 [package]
 name = "supersrg"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Techcable <Techcable@techcable.net>"]
 description = "The ultimate mapping utility"
 # Shouldn't be released to crates.io
